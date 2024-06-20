@@ -21,7 +21,7 @@ train_x, train_y = creatDataSet(data_path, annotation_path, CLASSES)
 model = buildModel((128, 128, 1), 4)
 
 model.compile(optimizer=tf.keras.optimizers.Adam(),
-            loss = {'cl_head' : 'categorical_crossentropy', 'bb_head' : tf.keras.losses.MSE },
+            loss = {'cl_head' : tf.keras.losses.CategoricalCrossentropy(), 'bb_head' : tf.keras.losses.MSE },
             metrics = {'cl_head' : 'accuracy', 'bb_head' : tf.keras.losses.MSE })
 
 model.summary()
@@ -30,5 +30,15 @@ steps_per_epoch = int(len(train_x) / BATCH_SIZE)
 model.fit(train_x, train_y, batch_size = BATCH_SIZE, steps_per_epoch = steps_per_epoch , epochs = EPOCHS)
 
 model.save('model.h5')
+
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+
+with open("model.tflite", "wb") as f:
+    f.write(tflite_model)
+
+print("done")
+
+
 
 

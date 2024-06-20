@@ -23,6 +23,7 @@ def buildModel(input_shape, n_classes):
     x = convBlock(x, 128)
 
 
+
     x = Flatten()(x)
 
     locator_branch = Dense(128, activation='relu')(x)
@@ -38,7 +39,6 @@ def buildModel(input_shape, n_classes):
 if __name__ == "__main__" :
     model = buildModel((128, 128, 1) ,4)
     model.summary()
-
 
 
 
