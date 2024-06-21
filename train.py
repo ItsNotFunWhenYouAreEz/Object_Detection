@@ -10,8 +10,7 @@ from tensorflow.keras.models import load_model
 
 BATCH_SIZE = 16
 CLASSES = ["B" , "H", "S", "U"]
-EPOCHS = 40
-
+EPOCHS = 100
 
 img_size = (128, 128, 1)
 data_path = "Data/Images/"

@@ -4,7 +4,6 @@ import cv2
 import numpy as np
 import xml.etree.ElementTree as ET
 from tqdm import tqdm
-import tensorflow as tf
 
 def readAnnottion(annotate_file, classes,):
     w, h  = (128, 128 )
@@ -16,14 +15,7 @@ def readAnnottion(annotate_file, classes,):
         xmlbox = obj.find('bndbox')
         box = np.asarray([int(xmlbox.find('xmin').text) / w, int(xmlbox.find('ymin').text) /h ,
              int(xmlbox.find('xmax').text) / w, int(xmlbox.find('ymax').text) / h])
-        return [box[0], box[1], box[2], box[3]], classes
-
-def readTextAnnotation(annotate_file) :
-    with open(annotate_file, "r") as f : 
-        x = f.read()
-        box = x.split() 
-        return [int(int(box[0]) / 128), int(int(box[1]) / 128), int(int(box[2]) / 128), int(int(box[3]) / 128)]
-
+    return [box[0], box[1], box[2], box[3]], classes
 
 def creatDataSet(images_dir, annotate_dir, classes) :
     X = [ ]
@@ -32,7 +24,7 @@ def creatDataSet(images_dir, annotate_dir, classes) :
     boxes = [ ]
 
     for label in os.listdir(images_dir) :   
-            for i in os.listdir(images_dir + label) :   
+            for i in tqdm(os.listdir(images_dir + label)) :   
 
                 img = cv2.imread(images_dir + label + "/" + i)
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

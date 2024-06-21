@@ -15,14 +15,12 @@ def buildModel(input_shape, n_classes):
     input = tf.keras.layers.Input(input_shape)
     x = Rescaling(1./255)(input)
 
-    x = convBlock(input, 32)
+    x = convBlock(input, 16)
     x = convBlock(x, 32)
-    x = convBlock(x, 32)
+    x = convBlock(x, 64)
     x = convBlock(x, 64)
     x = convBlock(x, 128)
     x = convBlock(x, 128)
-
-
 
     x = Flatten()(x)
 
@@ -39,6 +37,3 @@ def buildModel(input_shape, n_classes):
 if __name__ == "__main__" :
     model = buildModel((128, 128, 1) ,4)
     model.summary()
-
-
-
