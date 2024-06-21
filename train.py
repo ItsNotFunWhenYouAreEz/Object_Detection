@@ -31,14 +31,4 @@ model.fit(train_x, train_y, batch_size = BATCH_SIZE, steps_per_epoch = steps_per
 
 model.save('model.h5')
 
-converter = tf.lite.TFLiteConverter.from_keras_model(model)
-tflite_model = converter.convert()
-
-with open("model.tflite", "wb") as f:
-    f.write(tflite_model)
-
-print("done")
-
-
-
 
