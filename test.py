@@ -15,7 +15,7 @@ while(True):
 
         img = cv2.resize(img, (128, 128))
         frame = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
-        ret, frame = cv2.threshold(frame, 75, 255, cv2.THRESH_BINARY)  
+        ret, frame = cv2.threshold(frame, 85, 255, cv2.THRESH_BINARY)  
         input = (np.expand_dims(frame, 0))
         x = model.predict(input, verbose=2)
         cls = np.argmax(x[1][0])
