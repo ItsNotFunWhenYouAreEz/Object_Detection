@@ -5,16 +5,24 @@ from model import buildModel
 from DataLoader import creatDataSet
 
 def sechdule(epoch) :
-    if epoch <= 35 :
+    if epoch <= 20 :
         return 0.0005
-    elif epoch <= 25 :
+    
+    elif epoch <= 40 :
         return 0.0001
-    else : 
-        return 0.00001
+    
+    elif epoch < 60 : 
+        return 0.00005
+    
+    elif epoch < 75 : 
+        return 0.000005
+    
+    else :
+        return 0.000001 
 
 BATCH_SIZE = 16
 CLASSES = ["B" , "H", "S", "U"]
-EPOCHS = 60
+EPOCHS = 100
 
 img_size = (128, 128, 1)
 data_path = "Data/Images/"
@@ -29,11 +37,11 @@ model.compile(optimizer=tf.keras.optimizers.Adam(),
 
 lr_callback = tf.keras.callbacks.LearningRateScheduler(sechdule, verbose=False)
 
-
-
 steps_per_epoch = int(len(train_x) / BATCH_SIZE)
 model.fit(train_x, train_y, batch_size = BATCH_SIZE, steps_per_epoch = steps_per_epoch , epochs = EPOCHS, callbacks = [lr_callback])
 
 model.save('model.h5')
+
+
 
 

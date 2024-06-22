@@ -13,8 +13,8 @@ while(True):
         ret, img = camera.read()
         h, w ,c = img.shape
 
-        frame = cv2.resize(img, (128, 128))
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
+        img = cv2.resize(img, (128, 128))
+        frame = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
         ret, frame = cv2.threshold(frame, 75, 255, cv2.THRESH_BINARY)  
         input = (np.expand_dims(frame, 0))
         x = model.predict(input, verbose=2)
@@ -28,13 +28,13 @@ while(True):
             if cls == 3 :
                 char = "U"
 
-            x1 = x[0][0][0] * (w / 128) * 128 
-            y1 = x[0][0][1] * (h / 128) * 128 
-            x2 = x[0][0][2] * (w / 128) * 128 
-            y2 = x[0][0][3] * (h / 128) * 128
+            x1 = x[0][0][0] * 128 
+            y1 = x[0][0][1] * 128 
+            x2 = x[0][0][2] * 128 
+            y2 = x[0][0][3] * 128
 
             cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-            cv2.putText(img, char, (50, 50), cv2.FONT_HERSHEY_SIMPLEX , 3, (0, 255, 0), 2, cv2.LINE_AA) 
+            cv2.putText(img, char, (20, 20), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 255, 0), 1, cv2.LINE_AA) 
 
 
         cv2.imshow("cam" , img)

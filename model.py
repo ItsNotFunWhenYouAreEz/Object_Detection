@@ -3,24 +3,25 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Flatten, Conv2D, MaxPooling2D, Dense, BatchNormalization, Rescaling
-from tensorflow.keras import layers
 
-def convBlock(last_layer, units, kernel_size = 3, activation='relu') :
-    x = Conv2D(units, kernel_size, padding='same')(last_layer)
-    x = BatchNormalization()(x)
-    x = MaxPooling2D()(x)
-    return x 
 
 def buildModel(input_shape, n_classes):
-    input = tf.keras.layers.Input(input_shape)
+    input = Input(input_shape)
     x = Rescaling(1./255)(input)
 
-    x = convBlock(input, 16)
-    x = convBlock(x, 32)
-    x = convBlock(x, 64)
-    x = convBlock(x, 64)
-    x = convBlock(x, 128)
-    x = convBlock(x, 128)
+    x = Conv2D(16, 3, padding='same', use_bias = False)(x)
+    x = MaxPooling2D()(x)
+    x = Conv2D(32, 3, padding='same', use_bias = False)(x)
+    x = MaxPooling2D()(x)
+    x = Conv2D(32, 3, padding='same', use_bias = False)(x)
+    x = MaxPooling2D()(x)
+    x = Conv2D(64, 3, padding='same', use_bias = False)(x)
+    x = Conv2D(64, 3, padding='same', use_bias = False)(x)
+    x = MaxPooling2D()(x)
+    x = Conv2D(92, 3, padding='same', use_bias = False)(x)
+    x = MaxPooling2D()(x)
+    x = Conv2D(128, 3, padding='same', use_bias = False)(x)
+    x = MaxPooling2D()(x)
 
     x = Flatten()(x)
 
@@ -37,3 +38,4 @@ def buildModel(input_shape, n_classes):
 if __name__ == "__main__" :
     model = buildModel((128, 128, 1) ,4)
     model.summary()
+
