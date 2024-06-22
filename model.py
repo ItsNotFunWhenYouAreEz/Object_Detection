@@ -13,9 +13,8 @@ def buildModel(input_shape, n_classes):
     x = MaxPooling2D()(x)
     x = Conv2D(32, 3, padding='same', use_bias = False)(x)
     x = MaxPooling2D()(x)
-    x = Conv2D(32, 3, padding='same', use_bias = False)(x)
+    x = Conv2D(48, 3, padding='same', use_bias = False)(x)
     x = MaxPooling2D()(x)
-    x = Conv2D(64, 3, padding='same', use_bias = False)(x)
     x = Conv2D(64, 3, padding='same', use_bias = False)(x)
     x = MaxPooling2D()(x)
     x = Conv2D(92, 3, padding='same', use_bias = False)(x)
@@ -38,4 +37,3 @@ def buildModel(input_shape, n_classes):
 if __name__ == "__main__" :
     model = buildModel((128, 128, 1) ,4)
     model.summary()
-

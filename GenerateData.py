@@ -39,10 +39,14 @@ def addRandomNoise(img, value):
         img[random.randint(0, h-1), random.randint(0, w-1)] = 1
     return img
 
+def addRandomShape(img, size, x, y) :
+
+    img = cv2.rectangle(img, (x - size, y - size), (x + size, y - size), (255, 255, 255), -1) 
+    return img
 
 image_dir = "Data/Images" 
 annotation_dir = "Data/Annotation"
-noise_amount = [0, 100, 500, 1000, 1500, 2000, 2500, 3000, 3500]
+noise_amount = [0, 100, 500, 1000]
 
 for label in os.listdir(image_dir):
     dir = os.listdir(f"{image_dir}/{label}")
@@ -58,14 +62,18 @@ for label in os.listdir(image_dir):
             box, cls = readAnnottion(annotation_path)
             x1, y1, x2, y2  = box
 
-            for i in range(5) : 
-                if random.choice([0, 1]) > 0 :
-            
+            for i in range(100) : 
+                x1, y1, x2, y2  = box
+
+                if random.choice([0, 1, 2]) > 0 :
+                    x, y = random.randint(-x1, 128 - x2), random.randint(-y1, 128 - y2)
+                    im = move(img, x, y)
+                    x1, y1, x2, y2 = x1 + x, y1 + y, x2 + x, y2 + y
                     angle = random.randint(1, 360)
                     bb = np.array(((x1,y1),(x2,y1),(x2, y2),(x1, y2))) 
                     mat = cv2.getRotationMatrix2D((64, 64), angle, 1.0) 
 
-                    img_rotated = cv2.warpAffine(img, mat, img.shape[1::-1]) 
+                    img_rotated = cv2.warpAffine(im, mat, img.shape[1::-1], borderValue=(255,255,255)) 
 
                     bb_rotated = np.vstack((bb.T,np.array((1,1,1,1))))
                     bb_rotated = np.dot(mat,bb_rotated).T
@@ -81,10 +89,8 @@ for label in os.listdir(image_dir):
                         if i[1] > y2 :
                             y2 = int(i[1])
 
-
-                    x, y = random.randint(-x1, 128 - x2), random.randint(-y1, 128 - y2)
-                    createAnnotationFile(f"{annotation_dir}/{label}/{cnt}.xml", cls, x1 + x, y1 + y, x2 + x, y2 + y)
-                    cv2.imwrite(f"{image_dir}/{label}/{cnt}.png", addRandomNoise(move(img, x, y), random.choice(noise_amount)))
+                    createAnnotationFile(f"{annotation_dir}/{label}/{cnt}.xml", cls, x1, y1, x2, y2)
+                    cv2.imwrite(f"{image_dir}/{label}/{cnt}.png", addRandomNoise(img_rotated, random.choice(noise_amount)))
                     cnt += 1
                 else : 
                     x, y = random.randint(-x1, 128 - x2), random.randint(-y1, 128 - y2)
@@ -92,12 +98,11 @@ for label in os.listdir(image_dir):
                     cv2.imwrite(f"{image_dir}/{label}/{cnt}.png", addRandomNoise(move(img, x, y), random.choice(noise_amount)))
                     cnt += 1
         else : 
-            for i in range(5) : 
+            for i in range(50) : 
+                if random.choice([0, 1]) == 1 :
+                    addRandomShape(img, random.randint(1, 10), random.randint(1,128), random.randint(1,128))
                 x, y = random.randint(-50, 50), random.randint(-50, 50)
                 cv2.imwrite(f"{image_dir}/{label}/{cnt}.png", addRandomNoise(move(img, x, y), random.choice(noise_amount)))
                 cnt += 1
-
-
-
 
 
