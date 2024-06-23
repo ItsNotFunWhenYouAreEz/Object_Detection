@@ -15,36 +15,28 @@ def readAnnottion(annotate_file, classes,):
         xmlbox = obj.find('bndbox')
         box = np.asarray([int(xmlbox.find('xmin').text) / w, int(xmlbox.find('ymin').text) /h ,
              int(xmlbox.find('xmax').text) / w, int(xmlbox.find('ymax').text) / h])
-    return [box[0], box[1], box[2], box[3]], classes
+    return [classes[0], classes[1], classes[2], classes[3], box[0], box[1], box[2], box[3]]
 
 def creatDataSet(images_dir, annotate_dir, classes) :
     X = [ ]
-
-    classes = []
-    boxes = [ ]
+    Y = [ ]
 
     for label in os.listdir(images_dir) :   
             for i in tqdm(os.listdir(images_dir + label)) :   
-
+                
                 img = cv2.imread(images_dir + label + "/" + i)
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 img = np.expand_dims(img, 2 )
                 if label != "B" :
                     x = i.split(".")[0]
-                    box, classifier = readAnnottion(f"{annotate_dir}{label}/{x}.xml", ["B", "H", "S", "U"])
+                    annotate = readAnnottion(f"{annotate_dir}{label}/{x}.xml", ["B", "H", "S", "U"])
                 else :
-                    box, classifier = [0, 0, 0, 0], [1, 0, 0, 0]
+                    annotate = [1, 0, 0, 0, 0, 0, 0, 0]
                 X.append(img)
-                boxes.append(box)
-                classes.append(classifier)
+                Y.append(annotate)
 
     X = np.asarray(X)
-    boxes = np.asarray(boxes)
-    classes = np.asarray(classes)
+    Y = np.asarray(Y)
 
-    Y = {
-        "cl_head": classes,
-        "bb_head": boxes
-    }
 
     return X, Y

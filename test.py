@@ -18,8 +18,8 @@ while(True):
         ret, frame = cv2.threshold(frame, 85, 255, cv2.THRESH_BINARY)  
         input = (np.expand_dims(frame, 0))
         x = model.predict(input, verbose=2)
-        cls = np.argmax(x[1][0])
-
+        cls = np.argmax(x[0 : 4])
+        print(cls)
         if cls != 0 :
             if cls == 1 :
                 char = "H"
@@ -28,10 +28,10 @@ while(True):
             if cls == 3 :
                 char = "U"
 
-            x1 = x[0][0][0] * 128 
-            y1 = x[0][0][1] * 128 
-            x2 = x[0][0][2] * 128 
-            y2 = x[0][0][3] * 128
+            x1 = x[0][4] * 128 
+            y1 = x[0][5] * 128 
+            x2 = x[0][6] * 128 
+            y2 = x[0][7] * 128
 
             cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
             cv2.putText(img, char, (20, 20), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 255, 0), 1, cv2.LINE_AA) 
