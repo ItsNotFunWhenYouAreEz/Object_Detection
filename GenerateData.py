@@ -50,7 +50,7 @@ noise_amount = [0, 25]
 
 for label in os.listdir(image_dir):
     dir = os.listdir(f"{image_dir}/{label}")
-    cnt = len(dir) + 1 
+    cnt = 200
     for img_name in dir : 
 
         img = cv2.imread(f"{image_dir}/{label}/{img_name}")
