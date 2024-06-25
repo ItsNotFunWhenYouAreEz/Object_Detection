@@ -62,10 +62,10 @@ for label in os.listdir(image_dir):
             box, cls = readAnnottion(annotation_path)
             x1, y1, x2, y2  = box
 
-            for i in range(20) : 
+            for i in range(50) : 
                 x1, y1, x2, y2  = box
 
-                if False :
+                if random.choice([0, 1]) == 1 :
                     x, y = random.randint(-x1, 128 - x2), random.randint(-y1, 128 - y2)
                     im = move(img, x, y)
                     x1, y1, x2, y2 = x1 + x, y1 + y, x2 + x, y2 + y

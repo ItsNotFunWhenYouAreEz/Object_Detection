@@ -2,11 +2,11 @@ import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Flatten, Conv2D, MaxPooling2D, Dense, BatchNormalization, Rescaling
+from tensorflow.keras.layers import Input, Flatten, Conv2D, MaxPooling2D, Dense, Rescaling
 
 
 
-def buildModel(input_shape, n_classes):
+def buildModel(input_shape):
     input = Input(input_shape)
     x = Rescaling(1./255)(input)
 
@@ -30,7 +30,6 @@ def buildModel(input_shape, n_classes):
     x = MaxPooling2D()(x)
 
     x = Flatten()(x)
-    x = Dense(512, activation='relu')(x)
 
     x = Dense(256, activation='relu')(x)
     x = Dense(128, activation='relu')(x)
@@ -39,12 +38,11 @@ def buildModel(input_shape, n_classes):
     x = Dense(16, activation = "relu")(x)
     output = Dense(8, activation = "sigmoid")(x)
 
-    return Model(input, outputs = output)
+    return Model(input, output)
 
 if __name__ == "__main__" :
-    model = buildModel((128, 128, 1) ,4)
+    model = buildModel((128, 128, 1))
     model.summary()
-
 
 
 
